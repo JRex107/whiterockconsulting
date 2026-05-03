@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insights | White Rock Consulting</title>
+  <meta name="description" content="Data strategy thinking, practical guides, and industry perspectives from White Rock Consulting. Based in Swansea, Wales.">
+  <link rel="canonical" href="https://whiterockconsulting.net/blog">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <!-- marked.js for markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Netlify Identity for CMS auth redirect -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <style>
+    :root {
+      --bg: #0B0D0F;
+      --bg-2: #111417;
+      --bg-3: #161A1E;
+      --line: rgba(232, 230, 225, 0.08);
+      --line-strong: rgba(232, 230, 225, 0.16);
+      --fg: #E8E6E1;
+      --fg-dim: rgba(232, 230, 225, 0.62);
+      --fg-faint: rgba(232, 230, 225, 0.38);
+      --accent: oklch(0.74 0.08 200);
+      --accent-soft: oklch(0.74 0.08 200 / 0.14);
+      --accent-line: oklch(0.74 0.08 200 / 0.34);
+      --maxw: 1240px;
+      --pad: clamp(20px, 4vw, 56px);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-feature-settings: "ss01", "cv11";
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      line-height: 1.5;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    ::selection { background: var(--accent-soft); color: var(--fg); }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; }
+
+    .mono {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+    }
+
+    .container {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding-left: var(--pad);
+      padding-right: var(--pad);
+    }
+
+    /* ── nav ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(11, 13, 15, 0.72);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      width: 38px; height: 38px;
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+    .brand-mark svg { width: 100%; height: 100%; }
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      width: 5px; height: 5px;
+      background: var(--accent);
+      bottom: 2px; right: -2px;
+    }
+    .brand-name {
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: -0.005em;
+    }
+    .brand-name span { color: var(--fg-faint); font-weight: 400; }
+
+    .nav-links { display: flex; gap: 36px; align-items: center; }
+    .nav-links a {
+      font-size: 13px;
+      color: var(--fg-dim);
+      transition: color 160ms;
+    }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-links a.active { color: var(--fg); }
+    .nav-cta {
+      font-size: 13px;
+      color: var(--fg);
+      border: 1px solid var(--line-strong);
+      padding: 9px 16px;
+      border-radius: 999px;
+      transition: border-color 160ms, background 160ms;
+    }
+    .nav-cta:hover { border-color: var(--accent-line); background: var(--accent-soft); }
+
+    .menu-btn {
+      display: none;
+      background: none;
+      border: 1px solid var(--line-strong);
+      color: var(--fg);
+      padding: 8px;
+      border-radius: 6px;
+    }
+
+    @media (max-width: 680px) {
+      .menu-btn { display: flex; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 72px; left: 0; right: 0;
+        background: var(--bg-2);
+        border-bottom: 1px solid var(--line);
+        flex-direction: column;
+        padding: 20px var(--pad);
+        gap: 16px;
+        align-items: flex-start;
+      }
+      .nav-links.open { display: flex; }
+    }
+
+    /* ── page header ── */
+    .page-header {
+      padding: clamp(64px, 10vw, 120px) 0 clamp(40px, 6vw, 72px);
+      border-bottom: 1px solid var(--line);
+    }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .section-label::before {
+      content: "01";
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--fg-faint);
+    }
+    .section-label::after {
+      content: "";
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--line-strong);
+    }
+    .section-label span {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+    }
+    .page-title {
+      font-size: clamp(40px, 7vw, 80px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.0;
+      margin: 0 0 20px;
+    }
+    .page-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .page-subtitle {
+      font-size: clamp(15px, 2vw, 18px);
+      color: var(--fg-dim);
+      max-width: 520px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* ── blog grid ── */
+    .blog-section {
+      padding: clamp(48px, 8vw, 96px) 0;
+    }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+    }
+
+    .post-card {
+      background: var(--bg);
+      padding: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      cursor: pointer;
+      transition: background 200ms;
+      position: relative;
+    }
+    .post-card:hover { background: var(--bg-2); }
+    .post-card:hover .post-arrow { transform: translate(3px, -3px); }
+
+    .post-date {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+    }
+
+    .post-title {
+      font-size: clamp(18px, 2.2vw, 22px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      color: var(--fg);
+      margin: 0;
+    }
+
+    .post-summary {
+      font-size: 14px;
+      color: var(--fg-dim);
+      line-height: 1.65;
+      margin: 0;
+      flex: 1;
+    }
+
+    .post-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .read-more {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .post-arrow {
+      color: var(--accent);
+      transition: transform 200ms;
+    }
+
+    /* ── empty state ── */
+    .empty-state {
+      padding: 80px 0;
+      text-align: center;
+      color: var(--fg-faint);
+    }
+    .empty-state h3 {
+      font-size: 18px;
+      font-weight: 500;
+      margin: 0 0 8px;
+      color: var(--fg-dim);
+    }
+    .empty-state p {
+      font-size: 14px;
+      margin: 0;
+    }
+
+    /* ── loading ── */
+    .loading {
+      padding: 80px 0;
+      text-align: center;
+    }
+    .loading-dots {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .loading-dots span {
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+    .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes pulse {
+      0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+      40% { opacity: 1; transform: scale(1); }
+    }
+    .loading p { color: var(--fg-faint); font-size: 13px; margin: 0; }
+
+    /* ── post modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 13, 15, 0.92);
+      z-index: 100;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      overflow-y: auto;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--bg-2);
+      border: 1px solid var(--line-strong);
+      max-width: 720px;
+      width: 100%;
+      margin: 48px auto;
+      padding: clamp(32px, 5vw, 64px);
+      position: relative;
+      animation: slideUp 0.25s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 24px; right: 24px;
+      background: none;
+      border: 1px solid var(--line-strong);
+      color: var(--fg-dim);
+      width: 36px; height: 36px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 160ms, color 160ms;
+    }
+    .modal-close:hover { border-color: var(--accent-line); color: var(--fg); }
+
+    .modal-date {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-size: clamp(24px, 4vw, 38px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin: 0 0 32px;
+    }
+
+    .modal-divider {
+      height: 1px;
+      background: var(--line-strong);
+      margin: 0 0 32px;
+    }
+
+    /* Markdown content styles */
+    .modal-body { color: var(--fg-dim); line-height: 1.75; }
+    .modal-body h1, .modal-body h2, .modal-body h3 {
+      color: var(--fg);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin: 2em 0 0.75em;
+    }
+    .modal-body h2 { font-size: 1.3em; }
+    .modal-body h3 { font-size: 1.1em; }
+    .modal-body p { margin: 0 0 1.25em; }
+    .modal-body strong { color: var(--fg); font-weight: 600; }
+    .modal-body em { color: var(--accent); font-style: italic; }
+    .modal-body a { color: var(--accent); border-bottom: 1px solid var(--accent-line); transition: border-color 160ms; }
+    .modal-body a:hover { border-color: var(--accent); }
+    .modal-body ul, .modal-body ol { padding-left: 1.5em; margin: 0 0 1.25em; }
+    .modal-body li { margin-bottom: 0.5em; }
+    .modal-body blockquote {
+      border-left: 2px solid var(--accent);
+      padding-left: 20px;
+      margin: 1.5em 0;
+      color: var(--fg-dim);
+      font-style: italic;
+    }
+    .modal-body code {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.85em;
+      background: var(--bg-3);
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: var(--accent);
+    }
+    .modal-body pre {
+      background: var(--bg-3);
+      border: 1px solid var(--line);
+      padding: 20px;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin: 1.5em 0;
+    }
+    .modal-body pre code { background: none; padding: 0; }
+    .modal-body hr { border: none; border-top: 1px solid var(--line); margin: 2em 0; }
+
+    /* ── footer ── */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 0;
+    }
+    .foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .foot-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--fg-faint);
+      flex-wrap: wrap;
+    }
+    .foot-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--fg-faint);
+    }
+    .foot-right a { transition: color 160ms; }
+    .foot-right a:hover { color: var(--fg); }
+    .sep { opacity: 0.4; }
+
+    /* ── entrance animations ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .post-card { animation: fadeUp 0.5s ease forwards; opacity: 0; }
+    .post-card:nth-child(1) { animation-delay: 0.05s; }
+    .post-card:nth-child(2) { animation-delay: 0.1s; }
+    .post-card:nth-child(3) { animation-delay: 0.15s; }
+    .post-card:nth-child(4) { animation-delay: 0.2s; }
+    .post-card:nth-child(5) { animation-delay: 0.25s; }
+    .post-card:nth-child(6) { animation-delay: 0.3s; }
+
+    @media (max-width: 600px) {
+      .posts-grid { grid-template-columns: 1fr; }
+      .modal { margin: 0; border-left: none; border-right: none; min-height: 100vh; }
+      .foot { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="/site.html" class="brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 28L14 10H18L22 22L26 10H30L36 28H32L28 16L24 28H20L16 16L12 28H8Z" fill="#E8E6E1"/>
+            <rect x="6" y="27" width="26" height="1.5" fill="#E8E6E1" opacity="0.4"/>
+          </svg>
+        </div>
+        <div class="brand-name">White Rock <span>Consulting</span></div>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="/site.html#what">What We Do</a>
+        <a href="/site.html#services">Services</a>
+        <a href="/site.html#how">How We Work</a>
+        <a href="/blog.html" class="active">Insights</a>
+        <a href="/site.html#contact" class="nav-cta">Contact</a>
+      </div>
+      <button class="menu-btn" id="menuBtn" aria-label="Menu">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.4"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page header -->
+  <header class="page-header fade-up">
+    <div class="container">
+      <div class="section-label"><span>Insights</span></div>
+      <h1 class="page-title">Thinking out<br><em>loud.</em></h1>
+      <p class="page-subtitle">Practical perspectives on data strategy, analytics, and building organisations that actually use their data well.</p>
+    </div>
+  </header>
+
+  <!-- Blog posts -->
+  <section class="blog-section">
+    <div class="container">
+      <div id="postsGrid" class="posts-grid">
+        <!-- Loading state -->
+        <div class="loading" id="loadingState" style="grid-column:1/-1">
+          <div class="loading-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <p>Loading posts…</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Post modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modalContent">
+      <button class="modal-close" id="modalClose" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="modal-date" id="modalDate"></div>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-divider"></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container foot">
+      <div class="foot-left">
+        <svg width="24" height="24" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 28L14 10H18L22 22L26 10H30L36 28H32L28 16L24 28H20L16 16L12 28H8Z" fill="#E8E6E1" opacity="0.4"/>
+        </svg>
+        <span>© 2026 White Rock Consulting</span>
+        <span class="sep">·</span>
+        <span>Based in Swansea, Wales · Serving organisations across the UK</span>
+      </div>
+      <div class="foot-right">
+        <a href="https://www.linkedin.com/company/whiterockconsulting" target="_blank" rel="noopener">LinkedIn</a>
+        <span class="sep">·</span>
+        <a href="#">Privacy Policy</a>
+        <span class="sep">·</span>
+        <a href="mailto:info@whiterockconsulting.net">info@whiterockconsulting.net</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Mobile menu ──
+    const menuBtn = document.getElementById('menuBtn');
+    const navLinks = document.getElementById('navLinks');
+    menuBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+    // ── Fetch posts from GitHub ──
+    const GITHUB_USER = 'JRex107';
+    const GITHUB_REPO = 'whiterockconsulting';
+    const POSTS_PATH = '_posts';
+    const API_BASE = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${POSTS_PATH}`;
+
+    async function fetchPosts() {
+      const grid = document.getElementById('postsGrid');
+      const loading = document.getElementById('loadingState');
+
+      try {
+        const res = await fetch(API_BASE);
+        if (!res.ok) throw new Error('No posts found');
+
+        const files = await res.json();
+        const mdFiles = files.filter(f => f.name.endsWith('.md')).reverse();
+
+        loading.remove();
+
+        if (mdFiles.length === 0) {
+          grid.innerHTML = `
+            <div class="empty-state" style="grid-column:1/-1">
+              <h3>No posts yet</h3>
+              <p>Check back soon for insights and perspectives.</p>
+            </div>`;
+          return;
+        }
+
+        // Fetch each post's content
+        const posts = await Promise.all(mdFiles.map(async (file) => {
+          const contentRes = await fetch(file.download_url);
+          const raw = await contentRes.text();
+          return parsePost(file.name, raw);
+        }));
+
+        // Render cards
+        posts.forEach((post, i) => {
+          const card = document.createElement('div');
+          card.className = 'post-card';
+          card.innerHTML = `
+            <div class="post-date">${post.date}</div>
+            <h2 class="post-title">${post.title}</h2>
+            <p class="post-summary">${post.summary}</p>
+            <div class="post-footer">
+              <span class="read-more">Read post</span>
+              <svg class="post-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>`;
+          card.addEventListener('click', () => openPost(post));
+          grid.appendChild(card);
+        });
+
+      } catch (err) {
+        loading.remove();
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column:1/-1">
+            <h3>No posts yet</h3>
+            <p>Check back soon for insights and perspectives.</p>
+          </div>`;
+      }
+    }
+
+    function parsePost(filename, raw) {
+      // Parse YAML frontmatter
+      let title = '', date = '', summary = '', body = raw;
+
+      const fmMatch = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+      if (fmMatch) {
+        const fm = fmMatch[1];
+        body = fmMatch[2];
+
+        const titleMatch = fm.match(/^title:\s*(.+)$/m);
+        const dateMatch = fm.match(/^date:\s*(.+)$/m);
+        const summaryMatch = fm.match(/^summary:\s*(.+)$/m);
+
+        title = titleMatch ? titleMatch[1].replace(/^["']|["']$/g, '') : filename;
+        summary = summaryMatch ? summaryMatch[1].replace(/^["']|["']$/g, '') : '';
+        date = dateMatch ? formatDate(dateMatch[1]) : '';
+      }
+
+      // Fallback: derive from filename (2026-05-01-my-post.md)
+      if (!title) {
+        title = filename
+          .replace(/^\d{4}-\d{2}-\d{2}-/, '')
+          .replace(/\.md$/, '')
+          .replace(/-/g, ' ')
+          .replace(/\b\w/g, c => c.toUpperCase());
+      }
+
+      // Fallback summary from body
+      if (!summary) {
+        const plainText = body.replace(/[#*`_\[\]]/g, '').trim();
+        summary = plainText.slice(0, 160) + (plainText.length > 160 ? '…' : '');
+      }
+
+      return { title, date, summary, body };
+    }
+
+    function formatDate(dateStr) {
+      try {
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      } catch {
+        return dateStr;
+      }
+    }
+
+    // ── Modal ──
+    const overlay = document.getElementById('modalOverlay');
+    const modalClose = document.getElementById('modalClose');
+
+    function openPost(post) {
+      document.getElementById('modalDate').textContent = post.date;
+      document.getElementById('modalTitle').textContent = post.title;
+      document.getElementById('modalBody').innerHTML = marked.parse(post.body);
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      overlay.scrollTop = 0;
+    }
+
+    function closeModal() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Init
+    fetchPosts();
+  </script>
+</body>
+</html>
