@@ -1,0 +1,17 @@
+backend:
+  name: github
+  repo: JRex107/whiterockconsulting
+  branch: main
+
+media_folder: images
+public_folder: /images
+
+collections:
+  - name: blog
+    label: Blog Posts
+    folder: _posts
+    create: true
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime }
+      - { label: Body, name: body, widget: markdown }
