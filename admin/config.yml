@@ -1,6 +1,5 @@
 backend:
-  name: github
-  repo: JRex107/whiterockconsulting
+  name: git-gateway
   branch: main
 
 media_folder: images
