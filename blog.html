@@ -323,7 +323,7 @@
       -webkit-backdrop-filter: blur(8px);
       overflow-y: auto;
     }
-    .modal-overlay.open { display: flex; }
+    .modal-overlay.open { display: block; }
 
     .modal {
       background: var(--bg-2);
@@ -334,6 +334,7 @@
       padding: clamp(32px, 5vw, 64px);
       position: relative;
       animation: slideUp 0.25s ease;
+      display: block;
     }
 
     @keyframes slideUp {
