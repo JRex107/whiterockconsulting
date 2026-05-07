@@ -1,0 +1,2 @@
+# Force www to non-www
+https://www.whiterockconsulting.net/* https://whiterockconsulting.net/:splat 301!
