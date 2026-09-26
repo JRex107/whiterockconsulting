@@ -1,6 +1,6 @@
 # Force www to non-www
 https://www.whiterockconsulting.net/* https://whiterockconsulting.net/:splat 301!
 
-# Redirect site.html variants to homepage
-/site.html / 301!
-/site / 301!
+# Legacy URLs: the homepage used to live at /site.html
+/site.html / 301
+/site / 301

@@ -44,4 +44,4 @@ Analysts should be regularly reviewing what they produce and asking honestly whe
 
 All five of these things require time that most analysts do not currently have because that time is consumed by report production. The solution is not to work harder. It is to design the reporting function around decisions rather than around outputs, automate or streamline the routine work where possible, and protect analyst time for the work that actually requires analytical thinking.
 
-If your team is stuck in a reporting treadmill, [get in touch](https://whiterockconsulting.net/site.html#contact). It is one of the most common problems we help organisations fix.
+If your team is stuck in a reporting treadmill, [get in touch](https://whiterockconsulting.net/#contact). It is one of the most common problems we help organisations fix.

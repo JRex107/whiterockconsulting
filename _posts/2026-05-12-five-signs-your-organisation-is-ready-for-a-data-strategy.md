@@ -36,4 +36,4 @@ Recognising them is the first step. The second is resisting the temptation to ju
 
 If several of these signs resonate, it is probably worth having a conversation about what a realistic starting point looks like for your organisation. There is no universal template, but there is almost always a sensible place to begin.
 
-If this sounds familiar, [get in touch](https://whiterockconsulting.net/site.html#contact), we work with organisations across the UK to build data strategies that are grounded in reality and designed to last.
+If this sounds familiar, [get in touch](https://whiterockconsulting.net/#contact), we work with organisations across the UK to build data strategies that are grounded in reality and designed to last.

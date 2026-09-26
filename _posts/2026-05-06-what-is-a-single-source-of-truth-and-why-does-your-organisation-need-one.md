@@ -41,4 +41,4 @@ It is also worth being realistic about scope. You do not need to solve everythin
 
 A single source of truth is not a luxury for large enterprises. It is a practical requirement for any organisation that wants to make confident decisions based on its data. If your meetings regularly start with a debate about which numbers to use, that is a sign you do not have one yet. And that is worth fixing.
 
-If getting your data to a place where everyone trusts it sounds like a challenge worth tackling, [get in touch](https://whiterockconsulting.net/site.html#contact). It is exactly the kind of problem we help organisations work through.
+If getting your data to a place where everyone trusts it sounds like a challenge worth tackling, [get in touch](https://whiterockconsulting.net/#contact). It is exactly the kind of problem we help organisations work through.

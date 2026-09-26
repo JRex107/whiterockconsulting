@@ -40,4 +40,4 @@ It starts with honesty about where you actually are, not where you would like to
 
 None of that is complicated. But it does require slowing down at the start, which is exactly what most organisations are reluctant to do.
 
-If this sounds familiar, [get in touch](https://whiterockconsulting.net/site.html#contact). We work with organisations across the UK to build data strategies that are grounded in reality and designed to last.
+If this sounds familiar, [get in touch](https://whiterockconsulting.net/#contact). We work with organisations across the UK to build data strategies that are grounded in reality and designed to last.

@@ -50,4 +50,4 @@ First impressions matter. A dashboard that confuses people in its first outing r
 
 Building a dashboard your senior leadership team will actually use is less about technical skill and more about understanding your audience. Start with their decisions, use their language, limit what you show, and build it with them rather than for them. The technology is the easy part.
 
-If you are rebuilding your reporting from scratch or trying to get more traction from dashboards that are not being used, [get in touch](https://whiterockconsulting.net/site.html#contact). It is one of the things we do best.
+If you are rebuilding your reporting from scratch or trying to get more traction from dashboards that are not being used, [get in touch](https://whiterockconsulting.net/#contact). It is one of the things we do best.

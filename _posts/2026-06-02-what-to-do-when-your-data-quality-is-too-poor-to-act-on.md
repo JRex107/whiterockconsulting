@@ -47,4 +47,4 @@ This does not need to be complicated. A simple set of data quality checks run on
 
 Poor data quality is fixable in almost every organisation. The key is not to treat it as an all-or-nothing problem. Start with the data that matters most, fix the processes that are creating the problems, and build in monitoring to keep things on track.
 
-If your organisation is stuck in a cycle of questioning the data rather than using it, [get in touch](https://whiterockconsulting.net/site.html#contact). It is exactly the kind of problem we help organisations work through.
+If your organisation is stuck in a cycle of questioning the data rather than using it, [get in touch](https://whiterockconsulting.net/#contact). It is exactly the kind of problem we help organisations work through.

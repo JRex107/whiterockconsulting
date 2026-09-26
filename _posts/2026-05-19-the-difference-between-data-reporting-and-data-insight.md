@@ -42,4 +42,4 @@ Getting from reporting to insight is not primarily a technology problem. It is a
 
 If your reporting is comprehensive but your meetings still feel like guesswork, that is usually the sign that something needs to change.
 
-If that resonates, [get in touch](https://whiterockconsulting.net/site.html#contact). It is one of the most common challenges we help organisations work through.
+If that resonates, [get in touch](https://whiterockconsulting.net/#contact). It is one of the most common challenges we help organisations work through.
