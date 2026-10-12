@@ -1,0 +1,213 @@
+/* ─────────────────────────────────────────────────────────────
+   Motion layer — marketing-page motion only.
+   First load and first scroll; nothing here touches a control
+   people use repeatedly. Everything that moves is gated on
+   html.motion, which an inline <head> script sets unless the
+   visitor prefers reduced motion. Without it the page is static.
+   ───────────────────────────────────────────────────────────── */
+
+@property --mx { syntax: "<length>"; inherits: false; initial-value: -999px; }
+@property --my { syntax: "<length>"; inherits: false; initial-value: -999px; }
+
+:root {
+  --sweep: 8s;          /* one radar revolution; motion.js times the pings to it */
+  --sweep-delay: 1.6s;  /* starts once the hero has drawn itself */
+}
+
+@keyframes wrc-rise {
+  from { opacity: 0; transform: translateY(18px); filter: blur(6px); }
+  to   { opacity: 1; transform: none; filter: none; }
+}
+@keyframes wrc-draw { to { stroke-dashoffset: 0; } }
+@keyframes wrc-in   { from { opacity: 0; } }
+@keyframes wrc-pop  { from { opacity: 0; transform: scale(0.6); } }
+@keyframes wrc-grow { from { opacity: 0; transform: scaleY(0.05); } }
+@keyframes wrc-spin { to { transform: rotate(360deg); } }
+@keyframes wrc-ping {
+  0%   { opacity: 0.9; transform: scale(1); }
+  30%  { opacity: 0;   transform: scale(4); }
+  100% { opacity: 0;   transform: scale(4); }
+}
+@keyframes wrc-flow { to { stroke-dashoffset: -1; } }
+
+/* ───────── hero: copy rises in, staggered ───────── */
+.motion .hero-grid > div:first-child > * {
+  animation: wrc-rise 900ms var(--ease-out) both;
+}
+.motion .hero-grid > div:first-child > :nth-child(1) { animation-delay: 80ms; }
+.motion .hero-grid > div:first-child > :nth-child(2) { animation-delay: 180ms; }
+.motion .hero-grid > div:first-child > :nth-child(3) { animation-delay: 260ms; }
+.motion .hero-grid > div:first-child > :nth-child(4) { animation-delay: 340ms; }
+.motion h1.hero-title .strike { animation-delay: 1s; }
+
+/* ───────── hero visual: draws itself, then the sweep starts ───────── */
+.hv-sweep { display: none; }
+
+.motion .hero-visual { container-type: size; }
+.motion .hv-glow { animation: wrc-in 1200ms ease-out both; }
+
+.motion .hv-arcs > * {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: wrc-draw 1400ms var(--ease-in-out) forwards;
+}
+.motion .hv-arcs > :nth-child(1) { animation-delay: 150ms; }
+.motion .hv-arcs > :nth-child(2) { animation-delay: 300ms; }
+.motion .hv-arcs > :nth-child(3) { animation-delay: 450ms; }
+.motion .hv-arcs > :nth-child(4) { animation-delay: 600ms; }
+
+.motion .hv-ring { animation: wrc-in 800ms ease-out 400ms both; }
+.motion .hv-spin {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wrc-in 800ms ease-out 400ms both, wrc-spin 90s linear infinite;
+}
+
+.motion .hv-bars rect {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: wrc-grow 700ms var(--ease-out) both;
+}
+.motion .hv-bars rect:nth-child(1) { animation-delay: 700ms; }
+.motion .hv-bars rect:nth-child(2) { animation-delay: 760ms; }
+.motion .hv-bars rect:nth-child(3) { animation-delay: 820ms; }
+.motion .hv-bars rect:nth-child(4) { animation-delay: 880ms; }
+.motion .hv-bars rect:nth-child(5) { animation-delay: 940ms; }
+
+.motion .hv-dots circle:not(.hv-ping) {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wrc-pop 500ms var(--ease-out) both;
+  animation-delay: calc(900ms + var(--i, 0) * 50ms);
+}
+.motion .hv-signal { animation: wrc-in 600ms ease-out 1400ms both; }
+
+/* Radar sweep: conic wedge with a crisp leading edge at 12 o'clock */
+.motion .hv-sweep {
+  display: block;
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: min(100cqw, 100cqh);
+  height: min(100cqw, 100cqh);
+  border-radius: 50%;
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 280deg,
+    oklch(0.74 0.08 200 / 0.10) 340deg,
+    oklch(0.74 0.08 200 / 0.30) 360deg
+  );
+  -webkit-mask: radial-gradient(closest-side, #000 55%, transparent 88%);
+  mask: radial-gradient(closest-side, #000 55%, transparent 88%);
+  animation:
+    wrc-in 900ms ease-out var(--sweep-delay) both,
+    wrc-spin var(--sweep) linear var(--sweep-delay) infinite;
+}
+
+/* Each dot pings as the leading edge passes it (delays set in motion.js) */
+.hv-ping { display: none; }
+.motion .hv-ping {
+  display: inline;
+  fill: none;
+  stroke: oklch(0.74 0.08 200);
+  stroke-width: 0.6;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wrc-ping var(--sweep) var(--ease-out) infinite;
+}
+
+/* ───────── "what we do": pulses of data flow into the insight ───────── */
+.motion .flow-pulse {
+  stroke: oklch(0.74 0.08 200);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 0.05 1.5;
+  stroke-dashoffset: 0.05;
+  animation: wrc-flow 3s linear infinite;
+}
+
+/* Loops stop while they're off screen; they resume in sync */
+.motion .is-paused .hv-sweep,
+.motion .is-paused .hv-ping,
+.motion .is-paused .hv-spin,
+.motion .is-paused .flow-pulse,
+.motion .is-paused .cta-spin { animation-play-state: paused; }
+
+/* ───────── scroll reveal (fires once) ───────── */
+.motion [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 700ms var(--ease-out),
+    transform 900ms var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.motion [data-reveal].is-visible { opacity: 1; transform: none; }
+
+/* Section rule draws across as its label arrives */
+.motion .sec-label[data-reveal] .line {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 900ms var(--ease-out) 150ms;
+}
+.motion .sec-label.is-visible .line { transform: none; }
+
+/* Service marks draw themselves in */
+.motion .service[data-reveal] .service-mark [stroke]:not([stroke-dasharray]) {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+/* Strokes are matched by [stroke], not [pathLength]: attribute selectors
+   lowercase to [pathlength], which does not match camel-case SVG attributes */
+.motion .service.is-visible .service-mark [stroke]:not([stroke-dasharray]) {
+  animation: wrc-draw 1200ms var(--ease-in-out) forwards;
+  animation-delay: calc(var(--i, 0) * 70ms + 250ms);
+}
+.motion .service[data-reveal] .service-mark :is(rect, circle):not([stroke]) {
+  opacity: 0;
+  transform: scale(0.6);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 500ms var(--ease-out), transform 600ms var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 70ms + 700ms);
+}
+.motion .service[data-reveal] .service-mark rect[width="10"] { transform: scaleY(0.05); transform-origin: bottom; }
+.motion .service.is-visible .service-mark :is(rect, circle):not([stroke]) { opacity: 1; transform: none; }
+
+/* Contact: corner brackets lock on, ring turns slowly */
+.motion .cta-visual[data-reveal] .cta-ticks path {
+  opacity: 0;
+  transition: transform 800ms var(--ease-out) 300ms, opacity 500ms ease-out 300ms;
+}
+.motion .cta-visual[data-reveal] .cta-ticks .tl { transform: translate(-18px, -18px); }
+.motion .cta-visual[data-reveal] .cta-ticks .tr { transform: translate(18px, -18px); }
+.motion .cta-visual[data-reveal] .cta-ticks .bl { transform: translate(-18px, 18px); }
+.motion .cta-visual[data-reveal] .cta-ticks .br { transform: translate(18px, 18px); }
+.motion .cta-visual.is-visible .cta-ticks path { opacity: 1; transform: none; }
+.motion .cta-spin {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wrc-spin 120s linear infinite;
+}
+
+/* ───────── pointer light (fine pointers only; not motion, so not gated) ─────────
+   Grid seams glow around the cursor. Coordinates are set on the grid
+   itself and don't inherit, so children never recalculate. */
+@media (hover: hover) and (pointer: fine) {
+  .services, .wwd-marks, .posts-grid {
+    background-image: radial-gradient(
+      280px circle at var(--mx) var(--my),
+      oklch(0.74 0.08 200 / 0.6),
+      transparent 70%
+    );
+  }
+  .post-card, .post-card:hover {
+    background-image: radial-gradient(
+      420px circle at var(--mx) var(--my),
+      oklch(0.74 0.08 200 / 0.07),
+      transparent 70%
+    );
+  }
+}

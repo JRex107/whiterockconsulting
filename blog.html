@@ -255,7 +255,7 @@
 
     .post-arrow {
       color: var(--accent);
-      transition: transform 200ms cubic-bezier(.2,.7,.2,1);
+      transition: transform 200ms var(--ease-out);
     }
 
     /* ── empty state ── */
@@ -331,7 +331,7 @@
       position: relative;
       display: block;
       transform: translateY(16px);
-      transition: transform 260ms cubic-bezier(.2,.7,.2,1);
+      transition: transform 260ms var(--ease-out);
     }
     .modal-overlay.open .modal { transform: none; }
 
@@ -471,6 +471,7 @@
     }
   </style>
 <link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/motion.css">
 </head>
 <body>
 
@@ -711,5 +712,6 @@
     fetchPosts();
   </script>
 <script src="/assets/site.js" defer></script>
+<script src="/assets/motion.js" defer></script>
 </body>
 </html>
